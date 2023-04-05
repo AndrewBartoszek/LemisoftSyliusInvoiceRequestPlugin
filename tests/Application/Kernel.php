@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lemisoft\Tests\BoilerplatePlugin\Application;
+namespace Lemisoft\Tests\SyliusInvoiceRequestPlugin\Application;
 
 use PSS\SymfonyMockerContainer\DependencyInjection\MockerContainer;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
