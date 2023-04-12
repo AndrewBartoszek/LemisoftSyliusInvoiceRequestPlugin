@@ -1,0 +1,14 @@
+lsirp:
+    admin:
+        channel:
+            gus_api_section: Ustawienia GUS Api
+    form:
+        channel:
+            gus_api_token: Klucz api
+            gus_api_test: Włącz tryb testowy
+        order:
+            nip: NIP
+        checkout_address:
+            want_invoice: Chcę otrzymać fakturę VAT
+            get_billing_data_by_nip: Pobierz dane
+            get_data_info: "UWAGA: pobranie danych nadpisuje zawartość adresu do rachunku."

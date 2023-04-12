@@ -1,7 +1,7 @@
 {
     "name": "lemisoft/sylius-invoice-request-plugin",
     "type": "sylius-plugin",
-    "description": "Boilerplate plugin for Sylius.",
+    "description": "Plugin add nip field and integration with krs.",
     "keywords": [
         "sylius",
         "sylius-plugin"
@@ -11,6 +11,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "gusapi/gusapi": "^6.1",
         "sylius/mailer-bundle": "^2.0",
         "sylius/sylius": "^1.12",
         "symfony/webpack-encore-bundle": "^1.15"

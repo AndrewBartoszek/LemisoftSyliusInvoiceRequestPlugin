@@ -4,6 +4,3 @@ lemisoft_sylius_invoice_request_plugin_shop:
     requirements:
         _locale: ^[a-z]{2}(?:_[A-Z]{2})?$
 
-lemisoft_sylius_invoice_request_plugin_admin:
-    resource: "@LemisoftSyliusInvoiceRequestPlugin/config/admin_routing.yml"
-    prefix: /admin

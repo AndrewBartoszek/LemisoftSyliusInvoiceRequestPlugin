@@ -1,0 +1,13 @@
+lsirp:
+    admin:
+        channel:
+            gus_api_section: GUS Api configuration
+    form:
+        channel:
+            gus_api_token: Api key
+            gus_api_test: Turn on test mode
+        checkout_address:
+            nip: NIP
+            want_invoice: I want receive VAT invoice
+            get_billing_data_by_nip: Get data
+            get_data_info: "ATTENTION: Downloading data overwrites the contents of the billing address."

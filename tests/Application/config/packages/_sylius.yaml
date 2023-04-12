@@ -16,3 +16,15 @@ sylius_shop:
 
 sylius_api:
     enabled: true
+
+sylius_channel:
+    resources:
+        channel:
+            classes:
+                model: Lemisoft\Tests\SyliusInvoiceRequestPlugin\Application\src\Entity\Channel
+
+sylius_order:
+    resources:
+        order:
+            classes:
+                model: Lemisoft\Tests\SyliusInvoiceRequestPlugin\Application\src\Entity\Order

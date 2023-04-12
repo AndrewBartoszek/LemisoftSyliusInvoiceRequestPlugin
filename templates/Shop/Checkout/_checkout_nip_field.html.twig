@@ -1,0 +1,6 @@
+<div id="js-nip-container" style="{% if not form.wantInvoice.vars.data %}display:none;{% endif %}">
+    {{ form_row(form.nip) }}
+    <button id="js-get-data-to-billing-address-btn"
+            data-url="{{ path('lemisoft_invoice_request_gus_get_data_from_nip') }}">{{ 'lsirp.form.checkout_address.get_billing_data_by_nip' | trans }}</button>
+    <br><span>{{ 'lsirp.form.checkout_address.get_data_info' | trans }}</span>
+</div>

@@ -17,6 +17,68 @@ Dla php należy włączyć następujące rozszerzenia:
 5. Najlepiej używać plików konfiguracyjnych w formacie **.php**
 6. Publikacja wtyczki oraz używanie semantic version
 
+## Instalacja pluginu
+
+- W pliku config/services.yaml dodać import:
+    ```bash
+    imports:
+        - { resource: "@LemisoftSyliusInvoiceRequestPlugin/src/Resources/config/app/config.php" }
+    ```
+- Używamy trait'a i dodajemu interface w Order
+    ```bash
+    use Doctrine\ORM\Mapping as ORM;
+    use Lemisoft\SyliusInvoiceRequestPlugin\Entity\OrderInterface;
+    use Lemisoft\SyliusInvoiceRequestPlugin\Entity\OrderTrait;
+    use Sylius\Component\Core\Model\Order as BaseOrder;
+
+    #[ORM\Entity()]
+    #[ORM\Table(name: "sylius_order")]
+    class Order extends BaseOrder implements OrderInterface
+    {
+      use OrderTrait;
+    }
+    ```
+- Używamy trait'a i dodajemu interface w Channel
+    ```bash
+    use Doctrine\ORM\Mapping as ORM;
+    use Lemisoft\SyliusInvoiceRequestPlugin\Entity\ChannelInterface;
+    use Lemisoft\SyliusInvoiceRequestPlugin\Entity\ChannelTrait;
+    use Sylius\Component\Core\Model\Channel as BaseChannel;
+
+    #[ORM\Entity()]
+    #[ORM\Table(name:"sylius_channel")]
+    class Channel extends BaseChannel implements ChannelInterface
+    {
+      use ChannelTrait;
+    }
+    ```
+
+- Tworzymy plik encji GusConfiguration:
+    ```bash
+    declare(strict_types=1);
+
+    namespace Lemisoft\Tests\SyliusInvoiceRequestPlugin\Application\src\Entity;
+
+    class GusConfiguration extends \Lemisoft\SyliusInvoiceRequestPlugin\Entity\GusConfiguration
+    {
+
+    }
+    ```
+
+- W pliku z konfiguracją routingu dodać import:
+   ```bash
+    lemisoft_sylius_invoice_request_plugin_shop:
+      resource: "@LemisoftSyliusInvoiceRequestPlugin/config/shop_routing.yml"
+      prefix: /{_locale}
+      requirements:
+        _locale: ^[a-z]{2}(?:_[A-Z]{2})?$
+   ```
+- Instalacja assetów:
+   ```bash
+    APP_ENV=dev php bin/console assets:install public
+   ```
+
+
 ## Uruchomienie wtyczki
 
 Wtyczka uruchamiana jest przy użyciu Docker.

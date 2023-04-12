@@ -1,0 +1,5 @@
+lemisoft_invoice_request_gus_get_data_from_nip:
+    path: /gus/get_data_from_nip/
+    methods: [POST]
+    defaults:
+        _controller: lemisoft.sylius_invoice_request_plugin.controller.shop.gus_api_controller::getCompanyDataFromNIPAction
