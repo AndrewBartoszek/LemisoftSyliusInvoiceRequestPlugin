@@ -47,14 +47,12 @@ final class CheckoutAddressTypeExtension extends AbstractTypeExtension
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setNormalizer('validation_groups', function (Options $options, array $validationGroups) {
-            return function (FormInterface $form) use ($validationGroups) {
+        $resolver->setNormalizer('validation_groups', static fn (Options $options, array $validationGroups) => static function (FormInterface $form) use ($validationGroups) {
                 if ((bool)$form->get('wantInvoice')->getData()) {
                     $validationGroups[] = 'want_invoice_group';
                 }
 
                 return $validationGroups;
-            };
         });
     }
 

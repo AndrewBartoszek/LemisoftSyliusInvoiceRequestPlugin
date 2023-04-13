@@ -18,6 +18,6 @@ return static function (ContainerConfigurator $containerConfigurator) {
     $services
         ->set('lemisoft.sylius_invoice_request_plugin.controller.shop.gus_api_controller', GusApiController::class)
         ->args([
-            service(GusApiService::class)
+            service(GusApiService::class),
         ]);
 };

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Lemisoft\SyliusInvoiceRequestPlugin\Entity;
 
 use Sylius\Component\Channel\Model\ChannelInterface as BaseChannelInterface;

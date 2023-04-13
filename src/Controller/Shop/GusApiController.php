@@ -10,14 +10,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @psalm-suppress PropertyNotSetInConstructor
+ */
 final class GusApiController extends AbstractController
 {
     public function __construct(private GusApiService $gusApiService)
     {
     }
 
-    public function getCompanyDataFromNIPAction(Request $request)
+    public function getCompanyDataFromNIPAction(Request $request): JsonResponse
     {
         $nip = $request->request->get('nip');
 
@@ -29,7 +33,7 @@ final class GusApiController extends AbstractController
         $response = $this->gusApiService->getDataFromNip($nip);
 
         if (GusDataResponse::ERROR_STATUS === $response->status) {
-            return new JsonResponse($response, 400);
+            return new JsonResponse($response, Response::HTTP_BAD_REQUEST);
         }
 
         return new JsonResponse($response);

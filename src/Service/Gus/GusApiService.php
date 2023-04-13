@@ -8,7 +8,7 @@ use GusApi\Exception\InvalidUserKeyException;
 use GusApi\Exception\NotFoundException;
 use GusApi\GusApi;
 use GusApi\ReportTypes;
-use JMS\Serializer\SerializerInterface;
+use GusApi\SearchReport;
 use Lemisoft\SyliusInvoiceRequestPlugin\Entity\ChannelInterface;
 use Lemisoft\SyliusInvoiceRequestPlugin\Entity\GusConfigurationInterface;
 use Lemisoft\SyliusInvoiceRequestPlugin\Service\Gus\Model\GusDataResponse;
@@ -23,7 +23,7 @@ final class GusApiService
     private const FULL_REPORT_FIRST_NAME_KEY = 'fiz_imie1';
     private const FULL_REPORT_LAST_NAME_KEY = 'fiz_nazwisko';
 
-    public function __construct(private ChannelContextInterface $channelContext, private SerializerInterface $serializer)
+    public function __construct(private ChannelContextInterface $channelContext)
     {
     }
 
@@ -32,39 +32,12 @@ final class GusApiService
      */
     public function getDataFromNip(string $nip): GusDataResponse
     {
-        $gusApiClient = $this->getGusApiClient();
-
         $nip = str_replace([' ', '-'], '', $nip);
 
         $gusResponse = new GusDataResponse($nip);
         try {
-            $gusApiClient->login();
-            $reports = $gusApiClient->getByNip($nip);
-            foreach ($reports as $report) {
-                if ($report->getSilo() !== SiloIdType::ACTIVITY_DELETED->value) {
-                    $reportType = ReportTypes::REPORT_PERSON;
-                    $gusResponse->fromSearchReport($report);
-
-                    $fullReport = $gusApiClient->getFullReport($report, $reportType);
-                    if (isset($fullReport[0][self::FULL_REPORT_FIRST_NAME_KEY])) {
-                        $gusResponse->firstName = $fullReport[0][self::FULL_REPORT_FIRST_NAME_KEY];
-                    }
-                    if (isset($fullReport[0][self::FULL_REPORT_LAST_NAME_KEY])) {
-                        $gusResponse->lastName = $fullReport[0][self::FULL_REPORT_LAST_NAME_KEY];
-                    }
-
-                    $gusResponse->status = GusDataResponse::SUCCESS_STATUS;
-
-                    break;
-                }
-            }
-
-            if ($gusResponse->status === GusDataResponse::ERROR_STATUS) {
-                $gusResponse->massage = 'Data not found';
-            }
-
-            return $gusResponse;
-        } catch (InvalidUserKeyException|NotFoundException $e) {
+            return $this->tryGetGusData($nip, $gusResponse);
+        } catch (InvalidUserKeyException | NotFoundException $e) {
             $gusResponse->status = GusDataResponse::ERROR_STATUS;
             $gusResponse->massage = $e->getMessage();
 
@@ -72,9 +45,43 @@ final class GusApiService
         }
     }
 
-    public function getJsonResponse(GusDataResponse $response): string
+    protected function tryGetGusData(string $nip, GusDataResponse $gusResponse): GusDataResponse
     {
-        return $this->serializer->serialize($response, 'json');
+        $gusApiClient = $this->getGusApiClient();
+        $gusApiClient->login();
+        $reports = $gusApiClient->getByNip($nip);
+        foreach ($reports as $report) {
+            if ($report->getSilo() !== SiloIdType::ACTIVITY_DELETED->value) {
+                $gusResponse->fromSearchReport($report);
+                $gusResponse = $this->getPersonalData($gusApiClient, $report, $gusResponse);
+                $gusResponse->status = GusDataResponse::SUCCESS_STATUS;
+
+                break;
+            }
+        }
+
+        if (GusDataResponse::ERROR_STATUS === $gusResponse->status) {
+            $gusResponse->massage = 'Data not found';
+        }
+
+        return $gusResponse;
+    }
+
+    protected function getPersonalData(
+        GusApi $gusApiClient,
+        SearchReport $report,
+        GusDataResponse $gusResponse,
+    ): GusDataResponse {
+        $reportType = ReportTypes::REPORT_PERSON;
+        $fullReport = $gusApiClient->getFullReport($report, $reportType);
+        if (isset($fullReport[0][self::FULL_REPORT_FIRST_NAME_KEY])) {
+            $gusResponse->firstName = $fullReport[0][self::FULL_REPORT_FIRST_NAME_KEY];
+        }
+        if (isset($fullReport[0][self::FULL_REPORT_LAST_NAME_KEY])) {
+            $gusResponse->lastName = $fullReport[0][self::FULL_REPORT_LAST_NAME_KEY];
+        }
+
+        return $gusResponse;
     }
 
     protected function getGusApiClient(): GusApi
@@ -88,6 +95,7 @@ final class GusApiService
         } else {
             /** @var GusConfigurationInterface $gusConfig */
             $gusConfig = $channel->getGusConfiguration();
+            /** @var string $token */
             $token = $gusConfig->getToken();
             $env = self::PROD_ENV;
         }

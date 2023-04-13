@@ -26,7 +26,6 @@ return static function (ContainerConfigurator $containerConfigurator) {
         )
         ->args([
             service('sylius.context.channel'),
-            service('jms_serializer.serializer'),
         ])
         ->alias(GusApiService::class, 'lemisoft.sylius_invoice_request_plugin.service.gus.gus_api_service');
 };

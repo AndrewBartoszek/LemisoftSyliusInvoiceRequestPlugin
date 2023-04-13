@@ -11,15 +11,9 @@ class GusDataResponse
     public const ERROR_STATUS = 'error';
     public const SUCCESS_STATUS = 'success';
 
-    public function __construct(string $nip)
-    {
-        $this->nip = $nip;
-    }
-
     public string $status = self::ERROR_STATUS;
     public string $massage = '';
 
-    public string $nip;
     public ?string $firstName = null;
     public ?string $lastName = null;
     public ?string $company = null;
@@ -28,6 +22,10 @@ class GusDataResponse
     public ?string $buildingNumber = null;
     public ?string $apartmentNumber = null;
     public ?string $postCode = null;
+
+    public function __construct(public string $nip)
+    {
+    }
 
     public function fromSearchReport(SearchReport $searchReport): void
     {

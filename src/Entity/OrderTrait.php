@@ -8,7 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait OrderTrait
 {
-    #[ORM\Column(name: "nip", type: "string", length: 10, nullable: true)]
+    public const NIP_LENGTH = 10;
+
+    #[ORM\Column(name: "nip", type: "string", length: self::NIP_LENGTH, nullable: true)]
     private ?string $nip = null;
 
     public function getNip(): ?string
