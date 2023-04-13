@@ -11,6 +11,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-soap": "*",
         "gusapi/gusapi": "^6.1",
         "sylius/mailer-bundle": "^2.0",
         "sylius/sylius": "^1.12",
