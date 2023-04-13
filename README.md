@@ -18,11 +18,23 @@ Dla php należy włączyć następujące rozszerzenia:
 6. Publikacja wtyczki oraz używanie semantic version
 
 ## Instalacja pluginu
+- Dodać w pliku composer.json sklepu:
+```bash
+    "lemisoft-sylius-invoice-request-plugin" : {
+        "type": "vcs",
+        "url": "git@gitlab.lemisoft.pl:e-commerce/plugins/lemisoft-sylius-invoice-request-plugin.git"
+    }
+```
+- Puścić komendę:
+```bash
+composer require "lemisoft/sylius-invoice-request-plugin": release_version
+```
 
-- W pliku config/services.yaml dodać import:
+- W pliku config/services/_defaults.php dodać import:
     ```bash
-    imports:
-        - { resource: "@LemisoftSyliusInvoiceRequestPlugin/src/Resources/config/app/config.php" }
+    $configurator->import(
+        '@LemisoftSyliusInvoiceRequestPlugin/src/Resources/config/app/config.php',
+    );
     ```
 - Używamy trait'a i dodajemu interface w Order
     ```bash
@@ -59,25 +71,43 @@ Dla php należy włączyć następujące rozszerzenia:
 
     namespace Lemisoft\Tests\SyliusInvoiceRequestPlugin\Application\src\Entity;
 
-    class GusConfiguration extends \Lemisoft\SyliusInvoiceRequestPlugin\Entity\GusConfiguration
+    use Lemisoft\SyliusInvoiceRequestPlugin\Entity\GusConfiguration as BaseGusConfiguration;
+
+    class GusConfiguration extends BaseGusConfiguration
     {
 
     }
     ```
-
-- W pliku z konfiguracją routingu dodać import:
+- Generujemy migracje:
+    ```bash
+    php bin/console doctrine:migrations:diff
+    ```
+- Wykonujemy migracje:
+    ```bash
+    php bin/console doctrine:migrations:migrate
+    ```
+- W pliku (config/routes/sylius_shop.php) z konfiguracją routingu dodać import:
    ```bash
-    lemisoft_sylius_invoice_request_plugin_shop:
-      resource: "@LemisoftSyliusInvoiceRequestPlugin/config/shop_routing.yml"
-      prefix: /{_locale}
-      requirements:
-        _locale: ^[a-z]{2}(?:_[A-Z]{2})?$
+    $routes
+        ->import('@LemisoftSyliusInvoiceRequestPlugin/config/shop_routing.yml')
+        ->prefix('/{_locale}')
+        ->requirements(['_locale' => '%routing.locale%']);
    ```
+
+- Skopiować templatki z katalogu
+   ```bash
+    templates/bundles/SyliusShopBundle
+   ```
+  do templatek sklepu np. do katalogu
+   ```bash
+    web/templates/bundles/SyliusShopBundle
+   ```
+- Skopiować zawartość tłumaczeń z katalogu translations
+
 - Instalacja assetów:
    ```bash
     APP_ENV=dev php bin/console assets:install public
    ```
-
 
 ## Uruchomienie wtyczki
 
