@@ -1,7 +1,8 @@
 name: e-commerce-boilerplate
 services:
     app:
-        image: gitlab.lemisoft.pl:5050/e-commerce/docker-images/sylius-docker-standard:traditional
+        build:
+            context: .
         environment:
             APP_ENV: "dev"
             DATABASE_URL: "mysql://sylius:${MYSQL_PASSWORD:-nopassword}@mysql/sylius?charset=utf8mb4"

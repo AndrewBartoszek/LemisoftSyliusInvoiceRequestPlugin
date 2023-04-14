@@ -17,17 +17,31 @@ Dla php należy włączyć następujące rozszerzenia:
 5. Najlepiej używać plików konfiguracyjnych w formacie **.php**
 6. Publikacja wtyczki oraz używanie semantic version
 
-## Instalacja pluginu
-- Dodać w pliku composer.json sklepu:
-```bash
-    "lemisoft-sylius-invoice-request-plugin" : {
-        "type": "vcs",
-        "url": "git@gitlab.lemisoft.pl:e-commerce/plugins/lemisoft-sylius-invoice-request-plugin.git"
-    }
-```
+## Uruchomienie wtyczki
+
+Wtyczka uruchamiana jest przy użyciu Docker.
+Po sklonowaniu projektu należy zmienić nazewnictwo klas oraz plików konfiguracyjnych zgodnie z [dokumentacją](https://docs.sylius.com/en/latest/book/plugins/guide/naming.html).
+
+## Publikacja w Package Registry
+
+Każda wtyczka powinna zostać opublikowana w package registry zgodnie z numeracją semantic version. Proces publikacji wykonywany jest w gitlab ci/cd przy tagowaniu pakietu lub wywołana ręcznie.
+
+### Użycie wtyczki
+
+Instrukcja instalacji dostępna jest pod adresem https://gitlab.lemisoft.pl/help/user/packages/composer_repository/index#install-a-composer-package
+
+- Jeżeli w projekcie, gdzie chcemy użyć wtyczki, jest już osadzona własna wtyczka pochodząca z własnej dystrybucji
+package registry, to należy 2 pierwsze kroki. Dodać package registry url w pliku composer.json
+   ```bash
+    composer config repositories.gitlab.lemisoft.pl/552 '{"type": "composer", "url": "https://gitlab.lemisoft.pl/api/v4/group/552/-/packages/composer/packages.json"}
+   ```
+- Dodać sekcje gitlab-domain w composer.json
+   ```bash
+   composer config gitlab-domains gitlab.lemisoft.pl
+   ```
 - Puścić komendę:
 ```bash
-composer require "lemisoft/sylius-invoice-request-plugin": release_version
+composer require lemisoft/sylius-invoice-request-plugin
 ```
 
 - W pliku config/services/_defaults.php dodać import:
@@ -108,34 +122,6 @@ composer require "lemisoft/sylius-invoice-request-plugin": release_version
    ```bash
     APP_ENV=dev php bin/console assets:install public
    ```
-
-## Uruchomienie wtyczki
-
-Wtyczka uruchamiana jest przy użyciu Docker.
-Po sklonowaniu projektu należy zmienić nazewnictwo klas oraz plików konfiguracyjnych zgodnie z [dokumentacją](https://docs.sylius.com/en/latest/book/plugins/guide/naming.html).
-
-## Publikacja w Package Registry
-
-Każda wtyczka powinna zostać opublikowana w package registry zgodnie z numeracją semantic version. Proces publikacji wykonywany jest w gitlab ci/cd przy tagowaniu pakietu lub wywołana ręcznie.
-
-### Użycie wtyczki
-
-Instrukcja instalacji dostępna jest pod adresem https://gitlab.lemisoft.pl/help/user/packages/composer_repository/index#install-a-composer-package
-
-1. Dodać package registry url w pliku composer.json
-   ```bash
-    composer config repositories.gitlab.lemisoft.pl/552 '{"type": "composer", "url": "https://gitlab.lemisoft.pl/api/v4/group/552/-/packages/composer/packages.json"}
-   ```
-2. Wygenerować plik auth.json:
-   ```bash
-   composer config gitlab-token.gitlab.lemisoft.pl package_registry TM5p6E7xhmjbYtMwLMde
-   ```
-
-3. Dodać sekcje gitlab-domain w composer.json
-   ```bash
-   composer config gitlab-domains gitlab.lemisoft.pl
-   ```
-4. Zainstalować pakiet
 
 ### Docker
 
