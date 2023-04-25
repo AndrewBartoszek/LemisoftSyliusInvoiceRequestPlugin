@@ -1,4 +1,6 @@
-# Szablon wtyczki do sylius e-commerce
+# Wtyczka Lemisoft Sylius Invoice Request Plugin do sylius e-commerce
+
+Wtyczka umożliwia podanie NIP-u do zamówienia
 
 ## Wymagania
 
@@ -28,21 +30,25 @@ Każda wtyczka powinna zostać opublikowana w package registry zgodnie z numerac
 
 ### Użycie wtyczki
 
-Instrukcja instalacji dostępna jest pod adresem https://gitlab.lemisoft.pl/help/user/packages/composer_repository/index#install-a-composer-package
+Instrukcja instalacji dostępna jest pod
+adresem https://gitlab.lemisoft.pl/help/user/packages/composer_repository/index#install-a-composer-package
 
-- Jeżeli w projekcie, gdzie chcemy użyć wtyczki, jest już osadzona własna wtyczka pochodząca z własnej dystrybucji
-package registry, to należy 2 pierwsze kroki. Dodać package registry url w pliku composer.json
+1. Jeżeli w projekcie, gdzie chcemy użyć wtyczki, jest już osadzona własna wtyczka pochodząca z własnej dystrybucji
+   package registry, to należy przejść do kroku 3.
+   Dodać package registry url w pliku composer.json
    ```bash
     composer config repositories.gitlab.lemisoft.pl/552 '{"type": "composer", "url": "https://gitlab.lemisoft.pl/api/v4/group/552/-/packages/composer/packages.json"}
    ```
-- Dodać sekcje gitlab-domain w composer.json
+
+2. Dodać sekcje gitlab-domain w composer.json
    ```bash
    composer config gitlab-domains gitlab.lemisoft.pl
    ```
-- Puścić komendę:
-```bash
-composer require lemisoft/sylius-invoice-request-plugin
-```
+
+3. Zainstalować pakiet
+   ```bash
+   composer require lemisoft/sylius-invoice-request-plugin
+   ```
 
 - W pliku config/services/_defaults.php dodać import:
     ```bash
@@ -132,10 +138,8 @@ Do uruchomienia wtyczki potrzebujemy lokalnie zainstalowanych narzędzi:
 
 W projekcie zostały zdefiniowane następujące kontenery:
 
-* `php`
+* `app`
 * `mysql`
-* `ngnix`
-* `node`
 
 Aby uruchomić projekt, należy:
 
@@ -219,12 +223,4 @@ Plik konfiguracyjny: *[behat.yml.dist](behat.yml.dist)*
 
 ```bash
 make behat
-```
-
-### PhpSpec
-
-Plik konfiguracyjny: *[phpspec.yaml.dist](phpspec.yml.dist)*
-
-```bash
-make phpspec
 ```

@@ -3,17 +3,16 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          colors="true"
+         cacheDirectory=".phpunit.cache"
          bootstrap="tests/Application/config/bootstrap.php">
     <php>
-        <ini name="error_reporting" value="-1" />
-        <ini name="display_errors" value="1"/>
-        <ini name="memory_limit" value="512M"/>
-
         <server name="KERNEL_CLASS_PATH" value="/tests/Application/AppKernel.php" />
-        <server name="IS_DOCTRINE_ORM_SUPPORTED" value="true" />
+        <server name="APP_ENV" value="test" force="true"/>
+        <server name="SHELL_VERBOSITY" value="-1"/>
 
-        <env name="APP_ENV" value="test"/>
-        <env name="SHELL_VERBOSITY" value="-1" />
+        <ini name="display_errors" value="1"/>
+        <ini name="error_reporting" value="-1"/>
+        <ini name="memory_limit" value="512M"/>
     </php>
 
     <testsuites>
@@ -21,4 +20,11 @@
             <directory>tests</directory>
         </testsuite>
     </testsuites>
+
+    <coverage cacheDirectory="tests/_output/coverage/cache">
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+    </coverage>
 </phpunit>
+

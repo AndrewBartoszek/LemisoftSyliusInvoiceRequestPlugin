@@ -1,4 +1,0 @@
-suites:
-    main:
-        namespace: Lemisoft\SyliusInvoiceRequestPlugin
-        psr4_prefix: Lemisoft\SyliusInvoiceRequestPlugin

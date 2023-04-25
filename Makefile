@@ -1,6 +1,6 @@
 DOCKER_COMPOSE = docker compose
-EXEC_PHP       = $(DOCKER_COMPOSE) exec -T app
-RUN_PHP        = $(DOCKER_COMPOSE) run --rm --no-deps app
+EXEC_APP       = $(DOCKER_COMPOSE) exec -T app
+RUN_APP        = $(DOCKER_COMPOSE) run --rm --no-deps app
 COMPOSER       = composer
 CONSOLE        = ./tests/Application/bin/console
 PHPSTAN        = ./vendor/bin/phpstan
@@ -13,53 +13,50 @@ PSALM          = ./vendor/bin/psalm
 BEHAT          = ./vendor/bin/behat
 PHPSPEC        = ./vendor/bin/phpspec
 
+nd:
+	$(eval EXEC_APP := )
 rn:
-	$(eval EXEC_PHP := $(RUN_PHP))
-
-eslint:
-	$(EXEC_NODE) npm run lint
+	$(eval EXEC_APP := $(RUN_APP))
 
 phpcs:
-	$(EXEC_PHP) $(PHPCS) -p
+	$(EXEC_APP) $(PHPCS) -p
 
 ecs:
-	$(EXEC_PHP) $(ECS) check
+	$(EXEC_APP) $(ECS) check
 
 phpcbf:
-	$(EXEC_PHP) $(PHPCBF)
+	$(EXEC_APP) $(PHPCBF)
 
 phpstan:
-	$(EXEC_PHP) $(PHPSTAN) --memory-limit=-1
+	$(EXEC_APP) $(PHPSTAN) --memory-limit=-1
 
 phpmnd:
-	$(EXEC_PHP) $(PHPMND) src --ignore-funcs=sleep --progress --extensions=all
+	$(EXEC_APP) $(PHPMND) src --ignore-funcs=sleep --progress --extensions=all
 
 psalm:
-	$(EXEC_PHP) $(PSALM)
+	$(EXEC_APP) $(PSALM)
 
 behat:
-	APP_ENV=test $(EXEC_PHP) $(BEHAT) --colors --strict --no-interaction -f progress
+	APP_ENV=test $(EXEC_APP) $(BEHAT) --colors --strict --no-interaction -f progress
 
 phpunit:
-	$(EXEC_PHP) $(PHPUNIT) --testdox --colors=never
+	$(EXEC_APP) $(PHPUNIT) --testdox --colors=never
 
-phpspec:
-	$(EXEC_PHP) $(PHPSPEC) run --ansi --no-interaction -f dot
+backend-packages-install:
+	$(EXEC_APP) $(COMPOSER) install --no-interaction --no-scripts
 
-install:
-	$(EXEC_PHP) $(COMPOSER) install --no-interaction --no-scripts
+frontend-packages-install:
+	$(EXEC_APP) yarn install --cwd tests/Application --pure-lockfile
 
-backend:
-	$(EXEC_PHP) $(CONSOLE) sylius:install --no-interaction
-	$(EXEC_PHP) $(CONSOLE) sylius:fixtures:load default --no-interaction
+backend-init:
+	$(EXEC_APP) $(CONSOLE) sylius:install --no-interaction
+	$(EXEC_APP) $(CONSOLE) sylius:fixtures:load default --no-interaction
 
-frontend:
-	$(EXEC_PHP) yarn install --cwd tests/Application --pure-lockfile
-	GULP_ENV=prod  $(EXEC_PHP) yarn --cwd tests/Application build
+frontend-init:
+	GULP_ENV=prod  $(EXEC_APP) yarn --cwd tests/Application build
 
+init: backend-packages-install backend-init frontend-packages-install frontend-init
 
-init: install backend frontend
+tests: phpunit behat
 
-tests: phpunit behat phpspec
-
-quality: phpcs phpstan phpmnd ecs
+quality: phpcs phpstan phpmnd psalm ecs
