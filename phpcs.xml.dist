@@ -21,9 +21,10 @@
     <!-- Skanowane katalogi !-->
     <file>bin/</file>
     <file>config/</file>
-
     <file>src/</file>
     <file>tests/</file>
+    <file>migrations/</file>
+    <file>translations/</file>
 
     <exclude-pattern>tests/Application</exclude-pattern>
 
@@ -102,6 +103,8 @@
         <properties>
             <property name="searchAnnotations" value="true"/>
             <property name="allowFullyQualifiedGlobalClasses" value="true"/>
+            <property name="allowFullyQualifiedGlobalFunctions" value="true"/>
+            <property name="allowFullyQualifiedGlobalConstants" value="true"/>
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.Classes.ClassStructure">

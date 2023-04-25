@@ -67,7 +67,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Lemisoft\\Tests\\SyliusInvoiceRequestPlugin\\": "tests/"
+            "Lemisoft\\Tests\\SyliusInvoiceRequestPlugin\\": "tests/",
+            "Lemisoft\\Tests\\SyliusInvoiceRequestPlugin\\Application\\": "tests/Application/src"
         },
         "classmap": [
             "tests/Application/Kernel.php"

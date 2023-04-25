@@ -2,10 +2,12 @@ image: docker:20.10.24
 
 include:
     -   template: Security/Secret-Detection.gitlab-ci.yml
+    -   template: Security/SAST.gitlab-ci.yml
 
 variables:
     IMAGE_TAG: gitlab.lemisoft.pl:5050/e-commerce/docker-images/sylius-docker-standard:traditional
     PHP_DATE_TIMEZONE: Europe/Warsaw
+    XDEBUG_MODE: "coverage"
     FF_USE_FASTZIP: "true"
     ARTIFACT_COMPRESSION_LEVEL: "fast"
     CACHE_COMPRESSION_LEVEL: "fast"
@@ -21,7 +23,7 @@ variables:
 .app-job:
     image: $IMAGE_TAG
     cache:
-        - <<: *vendor-cache
+        -   <<: *vendor-cache
 
 stages:
     - build
@@ -35,7 +37,7 @@ app-build:
     before_script:
         - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password-stdin
     script:
-        - docker compose run --rm --no-deps app composer install --no-interaction --no-scripts
+        - docker compose run --rm --no-deps app make nd backend-packages-install
     cache:
         -   <<: *vendor-cache
             policy: pull-push
@@ -70,16 +72,34 @@ psalm:
     script:
         - make nd psalm
 
+twig:
+    extends: .app-job
+    stage: quality
+    script:
+        - make nd twig
+
 secret_detection:
+    stage: security
+
+sast:
     stage: security
 
 phpunit:
     extends: .app-job
     stage: tests
+    coverage: '/^\s*Lines:\s*\d+.\d+\%/'
     script:
         - make nd phpunit
+    artifacts:
+        when: always
+        reports:
+            junit: tests/_output/coverage/log-junit.xml
+            coverage_report:
+                coverage_format: cobertura
+                path: tests/_output/coverage/cobertura.xml
 
 .publish-job:
+    image: curlimages/curl:8.00.0
     stage: publish
     variables:
         URL: "${CI_API_V4_URL}/projects/$CI_PROJECT_ID/packages/composer"
@@ -98,7 +118,4 @@ publish-test:
     extends: .publish-job
     variables:
         VERSION: "branch=${CI_COMMIT_REF_NAME}"
-    only:
-        refs:
-            - master
     when: manual
