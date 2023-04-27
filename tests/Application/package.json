@@ -10,6 +10,14 @@
         "watch": "encore dev --watch"
     },
     "devDependencies": {
-        "@sylius-ui/frontend": "^1.0"
+        "@sylius-ui/frontend": "^1.0",
+        "@types/sortablejs": "^1.15.1",
+        "ts-loader": "^9.0.0",
+        "tslib": "^2.5.0",
+        "typescript": "^5.0.4"
+    },
+    "dependencies": {
+        "sortablejs": "^1.15.0",
+        "rxjs": "^7.8.0"
     }
 }

@@ -1,5 +1,5 @@
 lemisoft_sylius_invoice_request_plugin_shop:
-    resource: "@LemisoftSyliusInvoiceRequestPlugin/config/shop_routing.yml"
+    resource: "@LemisoftSyliusInvoiceRequestPlugin/config/shop_routing.php"
     prefix: /{_locale}
     requirements:
         _locale: ^[a-z]{2}(?:_[A-Z]{2})?$

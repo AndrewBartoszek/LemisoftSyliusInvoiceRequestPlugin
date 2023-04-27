@@ -21,10 +21,10 @@ sylius_channel:
     resources:
         channel:
             classes:
-                model: Lemisoft\Tests\SyliusInvoiceRequestPlugin\Application\src\Entity\Channel
+                model: Lemisoft\Tests\SyliusInvoiceRequestPlugin\Application\Entity\Channel
 
 sylius_order:
     resources:
         order:
             classes:
-                model: Lemisoft\Tests\SyliusInvoiceRequestPlugin\Application\src\Entity\Order
+                model: Lemisoft\Tests\SyliusInvoiceRequestPlugin\Application\Entity\Order

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Lemisoft\Tests\SyliusInvoiceRequestPlugin\Application\src\Entity;
+namespace Lemisoft\Tests\SyliusInvoiceRequestPlugin\Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Lemisoft\SyliusInvoiceRequestPlugin\Entity\ChannelInterface;
-use Lemisoft\SyliusInvoiceRequestPlugin\Entity\ChannelTrait;
+use Lemisoft\SyliusInvoiceRequestPlugin\Domain\Model\ChannelInterface;
+use Lemisoft\SyliusInvoiceRequestPlugin\Domain\Model\ChannelTrait;
 use Sylius\Component\Core\Model\Channel as BaseChannel;
 
 #[ORM\Entity()]

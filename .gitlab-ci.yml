@@ -22,6 +22,8 @@ variables:
 
 .app-job:
     image: $IMAGE_TAG
+    variables:
+        APP_ENV: test
     cache:
         -   <<: *vendor-cache
 
@@ -85,9 +87,19 @@ sast:
     stage: security
 
 phpunit:
+    services:
+        - mysql:8.0
+    variables:
+        MYSQL_ROOT_PASSWORD: nopassword
+        MYSQL_DATABASE: sylius
+        MYSQL_USER: sylius
+        MYSQL_PASSWORD: nopassword
+        DATABASE_URL: "mysql://sylius:nopassword@mysql/sylius?charset=utf8mb4"
     extends: .app-job
     stage: tests
     coverage: '/^\s*Lines:\s*\d+.\d+\%/'
+    before_script:
+        - make nd backend-init
     script:
         - make nd phpunit
     artifacts:

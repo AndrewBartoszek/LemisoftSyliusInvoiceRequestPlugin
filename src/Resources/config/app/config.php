@@ -13,9 +13,6 @@ return static function (ContainerConfigurator $containerConfigurator) {
     $containerConfigurator->import(
         '@LemisoftSyliusInvoiceRequestPlugin/src/Resources/config/sylius/sylius_resource.yaml',
     );
-    $containerConfigurator->import(
-        '@LemisoftSyliusInvoiceRequestPlugin/src/Resources/config/app/controller.php',
-    );
 
     $services = $containerConfigurator->services();
 

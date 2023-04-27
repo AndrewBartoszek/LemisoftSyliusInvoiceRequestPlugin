@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Lemisoft\SyliusInvoiceRequestPlugin\Service\Gus;
 
-use GusApi\Exception\InvalidUserKeyException;
-use GusApi\Exception\NotFoundException;
+use Exception;
 use GusApi\GusApi;
 use GusApi\ReportTypes;
 use GusApi\SearchReport;
-use Lemisoft\SyliusInvoiceRequestPlugin\Entity\ChannelInterface;
-use Lemisoft\SyliusInvoiceRequestPlugin\Entity\GusConfigurationInterface;
+use Lemisoft\SyliusInvoiceRequestPlugin\Domain\Model\ChannelInterface;
+use Lemisoft\SyliusInvoiceRequestPlugin\Domain\Model\GusConfigurationInterface;
 use Lemisoft\SyliusInvoiceRequestPlugin\Service\Gus\Model\GusDataResponse;
 use Lemisoft\SyliusInvoiceRequestPlugin\Service\Gus\Model\SiloIdType;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
@@ -32,14 +31,11 @@ final class GusApiService
      */
     public function getDataFromNip(string $nip): GusDataResponse
     {
-        $nip = str_replace([' ', '-'], '', $nip);
-
         $gusResponse = new GusDataResponse($nip);
         try {
             return $this->tryGetGusData($nip, $gusResponse);
-        } catch (InvalidUserKeyException | NotFoundException $e) {
+        } catch (Exception) {
             $gusResponse->status = GusDataResponse::ERROR_STATUS;
-            $gusResponse->massage = $e->getMessage();
 
             return $gusResponse;
         }
@@ -58,10 +54,6 @@ final class GusApiService
 
                 break;
             }
-        }
-
-        if (GusDataResponse::ERROR_STATUS === $gusResponse->status) {
-            $gusResponse->massage = 'Data not found';
         }
 
         return $gusResponse;
@@ -96,8 +88,11 @@ final class GusApiService
             /** @var GusConfigurationInterface $gusConfig */
             $gusConfig = $channel->getGusConfiguration();
             /** @var string $token */
-            $token = $gusConfig->getToken();
             $env = self::PROD_ENV;
+            $token = $gusConfig?->getToken();
+            if (null === $token) {
+                throw new \Exception('Production GUS configuration require token');
+            }
         }
 
         return new GusApi($token, $env);

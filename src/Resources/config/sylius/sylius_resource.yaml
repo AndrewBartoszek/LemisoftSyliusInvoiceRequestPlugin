@@ -3,4 +3,5 @@ sylius_resource:
         lemisoft_sylius_invoice_request_plugin.gus_configuration:
             driver: doctrine/orm
             classes:
-                model: Lemisoft\SyliusInvoiceRequestPlugin\Entity\GusConfiguration
+                model: Lemisoft\SyliusInvoiceRequestPlugin\Domain\Model\GusConfiguration
+
