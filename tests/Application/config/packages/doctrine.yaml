@@ -25,9 +25,3 @@ doctrine:
                         dir: '%kernel.project_dir%/src/Entity'
                         prefix: 'Lemisoft\Tests\SyliusInvoiceRequestPlugin\Application'
                         alias: LemisoftSyliusInvoiceRequestTestApp
-                    LemisoftSyliusInvoiceRequestPlugin:
-                        is_bundle: true
-                        type: attribute
-                        dir: 'src/Domain/Model'
-                        prefix: 'Lemisoft\SyliusInvoiceRequestPlugin\Domain\Model'
-                        alias: LemisoftSyliusInvoiceRequestPlugin

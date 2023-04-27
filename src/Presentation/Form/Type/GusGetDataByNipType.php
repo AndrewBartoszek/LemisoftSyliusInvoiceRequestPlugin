@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints\Regex;
 
 final class GusGetDataByNipType extends AbstractType
 {
-    const NUMERIC_VALUE_CODE = 0;
+    private const NUMERIC_VALUE_CODE = 0;
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

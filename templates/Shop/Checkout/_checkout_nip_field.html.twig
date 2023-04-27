@@ -2,7 +2,7 @@
     {{ form_row(form.nip) }}
     <button
             id="js-get-data-to-billing-address-btn"
-            data-url="{{ path('lemisoft_invoice_request_gus_get_data_from_nip') }}"
+            data-url="{{ path( constant('Lemisoft\\SyliusInvoiceRequestPlugin\\Presentation\\Controller\\GusGetDataByNipAction::ROUTE_NAME')) }}"
             data-token="{{ csrf_token('lemisoft_sylius_invoice_request_gus_get_data') }}"
     >
         {{ 'lsirp.form.checkout_address.get_billing_data_by_nip' | trans }}

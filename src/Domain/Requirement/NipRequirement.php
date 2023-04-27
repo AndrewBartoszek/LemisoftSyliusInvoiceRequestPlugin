@@ -6,5 +6,5 @@ namespace Lemisoft\SyliusInvoiceRequestPlugin\Domain\Requirement;
 
 final class NipRequirement
 {
-    const MAX_LENGTH = 10;
+    public const MAX_LENGTH = 10;
 }

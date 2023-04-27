@@ -1,6 +1,6 @@
 {% set channel = order.channel %}
 
-{% include '@LemisoftSyliusInvoiceRequestPlugin/Shop/Checkout/_checkout_want_invoice.html.twig' with {isBillingAddressHidden : channel.shippingAddressInCheckoutRequired} %}
+{{ sylius_template_event('lemisoft.shop.checkout.address.want_nip_switch', {'form': form, isBillingAddressHidden : channel.shippingAddressInCheckoutRequired}) }}
 
 {% if channel.shippingAddressInCheckoutRequired %}
     {% include '@SyliusShop/Checkout/Address/_shippingAddressRequired.html.twig' %}

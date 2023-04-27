@@ -24,7 +24,6 @@
     <file>src/</file>
     <file>tests/</file>
     <file>migrations/</file>
-    <file>translations/</file>
 
     <exclude-pattern>tests/Application</exclude-pattern>
 
@@ -211,6 +210,7 @@
             <property name="rootNamespaces" type="array">
                 <element key="src" value="Lemisoft\SyliusInvoiceRequestPlugin"/>
                 <element key="tests" value="Lemisoft\Tests\SyliusInvoiceRequestPlugin"/>
+                <element key="migrations" value="LemisoftSyliusInvoiceRequestPlugin"/>
             </property>
         </properties>
     </rule>

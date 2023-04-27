@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints\Regex;
 
 final class CheckoutAddressTypeExtension extends AbstractTypeExtension
 {
-    const NUMERIC_VALUE_CODE = 0;
+    private const NUMERIC_VALUE_CODE = 0;
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

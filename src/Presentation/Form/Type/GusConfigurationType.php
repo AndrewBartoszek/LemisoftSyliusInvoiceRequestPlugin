@@ -27,7 +27,7 @@ final class GusConfigurationType extends AbstractType
                     new NotBlank(groups: [FormGroupsType::GUS_CONFIGURATION_TYPE_PROD_CONF]),
                 ],
             ])
-            ->addEventSubscriber(new GusConfigurationTypeEventSubscriber());;
+            ->addEventSubscriber(new GusConfigurationTypeEventSubscriber());
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -35,7 +35,7 @@ final class GusConfigurationType extends AbstractType
         $resolver->setDefaults([
             'data_class'        => GusConfiguration::class,
             'validation_groups' => function (FormInterface $form) {
-                /** @var null|GusConfiguration $config */
+                /** @var GusConfiguration|null $config */
                 $config = $form->getData();
 
                 $groups = [Constraint::DEFAULT_GROUP, FormGroupsType::SYLIUS];

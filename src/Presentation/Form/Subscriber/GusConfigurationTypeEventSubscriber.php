@@ -21,14 +21,14 @@ final class GusConfigurationTypeEventSubscriber implements EventSubscriberInterf
 
     public function preSetData(FormEvent $event): void
     {
-        /** @var null|GusConfiguration $data */
+        /** @var GusConfiguration|null $data */
         $data = $event->getData();
         $form = $event->getForm();
 
         $form->add('isTest', CheckboxType::class, [
             'label'    => 'lsirp.form.channel.gus_api_test',
             'required' => false,
-            'data'     => (null === $data || $data->isTest())
+            'data'     => null === $data || $data->isTest(),
         ]);
     }
 }

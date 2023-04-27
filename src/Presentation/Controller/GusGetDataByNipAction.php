@@ -15,6 +15,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * @psalm-suppress PropertyNotSetInConstructor
+ */
 #[AsController]
 final class GusGetDataByNipAction extends AbstractController
 {
@@ -40,6 +43,7 @@ final class GusGetDataByNipAction extends AbstractController
 
             $form->get('nip')->addError(new FormError('lsirp.form.gus_nip_not_found'));
         }
+
         $jsonErrors = $this->serializer->serialize($form, 'json');
 
         return new JsonResponse($jsonErrors, Response::HTTP_BAD_REQUEST, [], true);

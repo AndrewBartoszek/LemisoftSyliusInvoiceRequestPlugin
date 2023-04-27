@@ -30,6 +30,8 @@ final class LemisoftSyliusInvoiceRequestExtension extends Extension implements P
     public function prepend(ContainerBuilder $container): void
     {
         $this->prependDoctrineMigrations($container);
+
+        $this->prependDoctrineMapping($container);
     }
 
     protected function getMigrationsNamespace(): string
@@ -45,5 +47,30 @@ final class LemisoftSyliusInvoiceRequestExtension extends Extension implements P
     protected function getNamespacesOfMigrationsExecutedBefore(): array
     {
         return ['Sylius\Bundle\CoreBundle\Migrations'];
+    }
+
+    private function prependDoctrineMapping(ContainerBuilder $container): void
+    {
+        $container->prependExtensionConfig('doctrine', [
+            'orm' => [
+                'mappings' => [
+                    'LemisoftSyliusInvoiceRequestPlugin' => [
+                        'type' => 'attribute',
+                        'dir' => $this->getPath($container, '/src/Domain/Model/'),
+                        'is_bundle' => false,
+                        'prefix' => 'Lemisoft\SyliusInvoiceRequestPlugin\Domain\Model',
+                        'alias' => 'LemisoftSyliusInvoiceRequestPlugin',
+                    ],
+                ],
+            ],
+        ]);
+    }
+
+    private function getPath(ContainerBuilder $container, string $path): string
+    {
+        /** @var array<string, array<string, string>> $metadata */
+        $metadata = $container->getParameter('kernel.bundles_metadata');
+
+        return $metadata['LemisoftSyliusInvoiceRequestPlugin']['path'] . $path;
     }
 }

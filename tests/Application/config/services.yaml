@@ -4,4 +4,4 @@ parameters:
     locale: pl_PL
 
 imports:
-    - { resource: "@LemisoftSyliusInvoiceRequestPlugin/src/Resources/config/app/config.php" }
+    - { resource: "@LemisoftSyliusInvoiceRequestPlugin/config/config.php" }

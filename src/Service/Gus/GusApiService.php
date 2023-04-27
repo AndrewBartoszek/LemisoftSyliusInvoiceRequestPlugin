@@ -9,7 +9,6 @@ use GusApi\GusApi;
 use GusApi\ReportTypes;
 use GusApi\SearchReport;
 use Lemisoft\SyliusInvoiceRequestPlugin\Domain\Model\ChannelInterface;
-use Lemisoft\SyliusInvoiceRequestPlugin\Domain\Model\GusConfigurationInterface;
 use Lemisoft\SyliusInvoiceRequestPlugin\Service\Gus\Model\GusDataResponse;
 use Lemisoft\SyliusInvoiceRequestPlugin\Service\Gus\Model\SiloIdType;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
@@ -26,12 +25,9 @@ final class GusApiService
     {
     }
 
-    /**
-     *  For testing use nip: 5422456771
-     */
     public function getDataFromNip(string $nip): GusDataResponse
     {
-        $gusResponse = new GusDataResponse($nip);
+        $gusResponse = new GusDataResponse();
         try {
             return $this->tryGetGusData($nip, $gusResponse);
         } catch (Exception) {
@@ -85,13 +81,11 @@ final class GusApiService
             $token = self::TEST_TOKEN;
             $env = self::DEV_ENV;
         } else {
-            /** @var GusConfigurationInterface $gusConfig */
             $gusConfig = $channel->getGusConfiguration();
-            /** @var string $token */
             $env = self::PROD_ENV;
             $token = $gusConfig?->getToken();
             if (null === $token) {
-                throw new \Exception('Production GUS configuration require token');
+                throw new Exception('Production GUS configuration require token');
             }
         }
 

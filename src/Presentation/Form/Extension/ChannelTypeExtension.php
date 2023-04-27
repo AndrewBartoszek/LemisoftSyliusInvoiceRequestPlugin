@@ -14,7 +14,9 @@ final class ChannelTypeExtension extends AbstractTypeExtension
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('gusConfiguration', GusConfigurationType::class);
+            ->add('gusConfiguration', GusConfigurationType::class, [
+                'label' => false,
+            ]);
     }
 
     public static function getExtendedTypes(): iterable
