@@ -56,7 +56,7 @@ final class LemisoftSyliusInvoiceRequestExtension extends Extension implements P
                 'mappings' => [
                     'LemisoftSyliusInvoiceRequestPlugin' => [
                         'type' => 'attribute',
-                        'dir' => $this->getPath($container, '/src/Domain/Model/'),
+                        'dir' => $this->getPath($container, '/src/Domain/Model'),
                         'is_bundle' => false,
                         'prefix' => 'Lemisoft\SyliusInvoiceRequestPlugin\Domain\Model',
                         'alias' => 'LemisoftSyliusInvoiceRequestPlugin',

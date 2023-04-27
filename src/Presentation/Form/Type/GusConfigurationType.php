@@ -40,7 +40,7 @@ final class GusConfigurationType extends AbstractType
 
                 $groups = [Constraint::DEFAULT_GROUP, FormGroupsType::SYLIUS];
 
-                if ($this->isProductConfig($config)) {
+                if ($this->isProductionConfig($config)) {
                     $groups[] = FormGroupsType::GUS_CONFIGURATION_TYPE_PROD_CONF;
                 }
 
@@ -49,7 +49,7 @@ final class GusConfigurationType extends AbstractType
         ]);
     }
 
-    protected function isProductConfig(?GusConfiguration $config): bool
+    protected function isProductionConfig(?GusConfiguration $config): bool
     {
         return null !== $config && !$config->isTest();
     }

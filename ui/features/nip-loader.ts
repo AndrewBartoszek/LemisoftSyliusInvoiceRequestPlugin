@@ -132,7 +132,7 @@ export class NipLoader {
     loadDefaultBillingAddressField(): BillingAddressField[] {
         const keys: string[] = Object.keys(BillingAddressFields);
         const values: string[] = Object.values(BillingAddressFields);
-        let result = [];
+        let result: BillingAddressField[] = [];
         for (const inputFieldName of keys) {
             let index: number = keys.indexOf(inputFieldName);
             let objAttributeName = values[index];
@@ -162,7 +162,7 @@ export class NipLoader {
         const errorDocument: Document = this.defaultDomHelper.parseTextToHtml(this.errorContainer.html);
         const errorElement: HTMLElement = new DomHelper(errorDocument).querySelector(this.errorContainer.errorContainerClass);
         const errorMessageContainer: HTMLElement = new DomHelper(errorDocument).querySelector(this.errorContainer.errorMessageElementClass);
-        const textNode = document.createTextNode(message);
+        const textNode: Text = document.createTextNode(message);
         errorMessageContainer.appendChild(textNode);
 
         return errorElement;
@@ -170,9 +170,9 @@ export class NipLoader {
 
     getDefaultErrorContainer() {
         return new ErrorContainer(
-            '<div class="ui red pointing label sylius-validation-error"></div>',
-            '.sylius-validation-error',
-            '.sylius-validation-error',
+            '<div class="invalid-feedback d-block"></div>',
+            '.invalid-feedback',
+            '.invalid-feedback',
         );
     }
 

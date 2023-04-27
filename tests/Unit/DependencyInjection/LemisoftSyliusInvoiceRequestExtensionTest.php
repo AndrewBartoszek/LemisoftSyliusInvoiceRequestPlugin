@@ -31,8 +31,14 @@ final class LemisoftSyliusInvoiceRequestExtensionTest extends TestCase
 
         self::assertArrayHasKey('LemisoftSyliusInvoiceRequestPlugin', $syliusCond[0]['migrations']);
         self::assertArrayHasKey('LemisoftSyliusInvoiceRequestPlugin', $doctrineConf[0]['migrations_paths']);
-        self::assertSame(['Sylius\Bundle\CoreBundle\Migrations'], $syliusCond[0]['migrations']['LemisoftSyliusInvoiceRequestPlugin']);
-        self::assertSame('@LemisoftSyliusInvoiceRequestPlugin/migrations', $doctrineConf[0]['migrations_paths']['LemisoftSyliusInvoiceRequestPlugin']);
+        self::assertSame(
+            ['Sylius\Bundle\CoreBundle\Migrations'],
+            $syliusCond[0]['migrations']['LemisoftSyliusInvoiceRequestPlugin'],
+        );
+        self::assertSame(
+            '@LemisoftSyliusInvoiceRequestPlugin/migrations',
+            $doctrineConf[0]['migrations_paths']['LemisoftSyliusInvoiceRequestPlugin'],
+        );
     }
 
     #[Test]
@@ -49,6 +55,23 @@ final class LemisoftSyliusInvoiceRequestExtensionTest extends TestCase
     }
 
     #[Test]
+    public function itPrependsConfigurationWithDoctrineMapping(): void
+    {
+        $this->extension->load([], $this->container);
+        $this->extension->prepend($this->container);
+
+        $doctrineConfig = $this->container->getExtensionConfig('doctrine')[0];
+
+        self::assertSame($doctrineConfig['orm']['mappings']['LemisoftSyliusInvoiceRequestPlugin'], [
+            'type' => 'attribute',
+            'dir' => __DIR__ . '../../src/Domain/Model',
+            'is_bundle' => false,
+            'prefix' => 'Lemisoft\SyliusInvoiceRequestPlugin\Domain\Model',
+            'alias' => 'LemisoftSyliusInvoiceRequestPlugin',
+        ]);
+    }
+
+    #[Test]
     public function itReturnsCorrectConfiguration(): void
     {
         self::assertInstanceOf(Configuration::class, $this->extension->getConfiguration([], $this->container));
@@ -58,5 +81,9 @@ final class LemisoftSyliusInvoiceRequestExtensionTest extends TestCase
     {
         $this->extension = new LemisoftSyliusInvoiceRequestExtension();
         $this->container = new ContainerBuilder();
+        $this->container->setParameter(
+            'kernel.bundles_metadata',
+            ['LemisoftSyliusInvoiceRequestPlugin' => ['path' => __DIR__ . '../..']],
+        );
     }
 }

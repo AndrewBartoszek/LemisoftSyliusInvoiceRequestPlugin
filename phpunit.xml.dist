@@ -5,7 +5,7 @@
          cacheDirectory=".phpunit.cache"
          bootstrap="tests/Application/config/bootstrap.php">
     <php>
-        <server name="KERNEL_CLASS_PATH" value="/tests/Application/AppKernel.php"/>
+        <server name="KERNEL_CLASS_PATH" value="/tests/Application/Kernel.php"/>
         <server name="APP_ENV" value="test" force="true"/>
         <server name="SHELL_VERBOSITY" value="-1"/>
 
@@ -14,8 +14,12 @@
         <ini name="memory_limit" value="512M"/>
     </php>
     <testsuites>
-        <testsuite name="Unit">
+        <testsuite name="unit">
             <directory>tests/Unit</directory>
+        </testsuite>
+
+        <testsuite name="integration">
+            <directory>tests/Integration</directory>
         </testsuite>
     </testsuites>
     <coverage cacheDirectory="tests/_output/coverage/cache"/>
