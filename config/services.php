@@ -12,8 +12,6 @@ use Sylius\Bundle\CoreBundle\Form\Type\Checkout\AddressType;
 return static function (ContainerConfigurator $containerConfigurator) {
     $services = $containerConfigurator->services();
 
-    $containerConfigurator->import('controller.php');
-
     $services
         ->set(
             'lemisoft.sylius_invoice_request_plugin.form.extension.checkout_address_type_extension',

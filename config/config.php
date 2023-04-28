@@ -9,6 +9,8 @@ use Lemisoft\SyliusInvoiceRequestPlugin\Service\Gus\GusApiService;
 return static function (ContainerConfigurator $containerConfigurator) {
     $containerConfigurator->import('config/*.php');
 
+    $containerConfigurator->import('controller.php');
+
     $containerConfigurator->import('config/sylius_resource.yaml');
 
     $services = $containerConfigurator->services();
