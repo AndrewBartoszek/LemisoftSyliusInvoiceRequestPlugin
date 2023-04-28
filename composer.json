@@ -1,5 +1,5 @@
 {
-    "name": "lemisoft/sylius-invoice-request-plugin",
+    "name": "lemisoft/sylius-invoice-request-pluginss",
     "type": "sylius-plugin",
     "description": "Plugin add nip field and integration with krs.",
     "keywords": [
