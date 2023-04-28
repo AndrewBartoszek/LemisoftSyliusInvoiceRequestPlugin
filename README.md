@@ -1,6 +1,6 @@
 # Wtyczka Lemisoft Sylius Invoice Request Plugin do sylius e-commerce
 
-Wtyczka umożliwia podanie NIP-u do zamówienia
+Wtyczka umożliwia podanie NIP-u do zamówienia i pobraniu danych z KRS
 
 ## Wymagania
 
@@ -50,84 +50,63 @@ adresem https://gitlab.lemisoft.pl/help/user/packages/composer_repository/index#
    composer require lemisoft/sylius-invoice-request-plugin
    ```
 
-- W pliku config/services/_defaults.php dodać import:
-    ```bash
-    $configurator->import(
-        '@LemisoftSyliusInvoiceRequestPlugin/src/Resources/config/app/config.php',
-    );
-    ```
-- Używamy trait'a i dodajemu interface w Order
-    ```bash
-    use Doctrine\ORM\Mapping as ORM;
-    use Lemisoft\SyliusInvoiceRequestPlugin\Entity\OrderInterface;
-    use Lemisoft\SyliusInvoiceRequestPlugin\Entity\OrderTrait;
-    use Sylius\Component\Core\Model\Order as BaseOrder;
+4. Zaimportować plik konfiguracyjny:
+   ```text
+   @LemisoftSyliusInvoiceRequestPlugin/config/config.php
+   ```
 
-    #[ORM\Entity()]
-    #[ORM\Table(name: "sylius_order")]
-    class Order extends BaseOrder implements OrderInterface
-    {
-      use OrderTrait;
-    }
-    ```
-- Używamy trait'a i dodajemu interface w Channel
-    ```bash
-    use Doctrine\ORM\Mapping as ORM;
-    use Lemisoft\SyliusInvoiceRequestPlugin\Entity\ChannelInterface;
-    use Lemisoft\SyliusInvoiceRequestPlugin\Entity\ChannelTrait;
-    use Sylius\Component\Core\Model\Channel as BaseChannel;
+5. Zaimportować routing wtyczki:
+   ```text
+   @LemisoftSyliusInvoiceRequestPlugin/config/shop_routing.php
+   ```
 
-    #[ORM\Entity()]
-    #[ORM\Table(name:"sylius_channel")]
-    class Channel extends BaseChannel implements ChannelInterface
-    {
-      use ChannelTrait;
-    }
-    ```
-
-- Tworzymy plik encji GusConfiguration:
-    ```bash
+6. Rozszerzyć encję Channel za pomocą traita ChannelTrait oraz interfejsu ChannelInterface:
+   ```php
     declare(strict_types=1);
 
-    namespace Lemisoft\Tests\SyliusInvoiceRequestPlugin\Application\src\Entity;
+    use Lemisoft\SyliusInvoiceRequestPlugin\Domain\Model\ChannelInterface;
 
-    use Lemisoft\SyliusInvoiceRequestPlugin\Entity\GusConfiguration as BaseGusConfiguration;
-
-    class GusConfiguration extends BaseGusConfiguration
+    class Channel extends BaseChannel implements ChannelInterface
     {
-
+        use ChannelTrait;
     }
-    ```
-- Generujemy migracje:
-    ```bash
-    php bin/console doctrine:migrations:diff
-    ```
-- Wykonujemy migracje:
-    ```bash
-    php bin/console doctrine:migrations:migrate
-    ```
-- W pliku (config/routes/sylius_shop.php) z konfiguracją routingu dodać import:
-   ```bash
-    $routes
-        ->import('@LemisoftSyliusInvoiceRequestPlugin/config/shop_routing.yml')
-        ->prefix('/{_locale}')
-        ->requirements(['_locale' => '%routing.locale%']);
    ```
 
-- Skopiować templatki z katalogu
-   ```bash
-    templates/bundles/SyliusShopBundle
-   ```
-  do templatek sklepu np. do katalogu
-   ```bash
-    web/templates/bundles/SyliusShopBundle
-   ```
-- Skopiować zawartość tłumaczeń z katalogu translations
+7. Rozszerzyć encję Order za pomocą traita OrderTrait oraz interfejsu OrderInterface:
+   ```php
+    declare(strict_types=1);
 
-- Instalacja assetów:
-   ```bash
-    APP_ENV=dev php bin/console assets:install public
+    use Lemisoft\SyliusInvoiceRequestPlugin\Domain\Model\OrderInterface;
+
+    class Order extends BaseOrder implements OrderInterface
+    {
+        use OrderTrait;
+    }
    ```
+
+8. W pliku `webpack.config.ts` w sekcji shop dodać następujący wpis:
+    ```text
+    .addEntry('nip-loader', path.resolve(__dirname, '../../ui/entry.ts'))
+    ```
+   Jeżeli w pliku `webpack.config.ts` nie znajdują się zdefiniowane aliasy dla wtyczek lemisoftowcyh, to należy taką konfigurację dodać:
+    ```typescript
+    const lemisoftBundles: string = path.resolve(__dirname, 'vendor/lemisoft');
+    ```
+
+9. Umieścić event wyświetlający pole NIP w formularzu adresu do billingu:
+   ```twig
+    {{ sylius_template_event('lemisoft.shop.checkout.address.billing_address.nip_container', {'form': form}) }}
+   ```
+    Umieścić event wyświetlający przycisk pokazujący sekcję z NIP-em
+   ```twig
+    {{ sylius_template_event('lemisoft.shop.checkout.address.want_nip_switch', {'form': form, isBillingAddressHidden : channel.shippingAddressInCheckoutRequired}) }}
+   ```
+
+10. Wyczyścić cache, aby pliki z tłumaczeniami zostały zaimportowane
+    ```bash
+    bin/console cache:clear
+    bin/console cache:warmup
+    ```
 
 ### Docker
 
